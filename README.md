@@ -38,7 +38,7 @@ To start the game:
 npm run start
 ```
 
-##How to connect
+## How to connect
 1. Both players connect to http://localhost:3000/niya 
 2. One of the the players creates a game with a custom string
 3. Player 2 joins with the game id chosen by Player 1
