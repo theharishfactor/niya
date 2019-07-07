@@ -5,6 +5,8 @@ This is an online implementation of the boardgame - Niya. This is a 2-player gam
 ## Gameplay:
 There is a 4x4 grid of tiles. Each tile has two of the following 8 symbols on it: Bird, Rain Cloud, Pine leaf, Cherry branch, Rising Sun, Poetry flag, Lily, Maple leaves.
 
+![View of the Niya gameboard](https://github.com/theharishfactor/niya/blob/master/client/img/niya%20tiles.png)
+
 On every turn, the player can cover one of the uncovered tiles on the board. The player can start with any tile on the first turn of the game. For every subsequent turn, players can only cover tiles that contain at least one symbol common with the previously covered tile.
 
 Example:
@@ -12,9 +14,13 @@ If Player 1 covers a tile with "Bird and Rain cloud", then the next player can c
 
 
 ## Winning Conditions:
-1. Get 4 consecutive tiles covered in a row or a column with same color.
-2. Get 2x2 grid of tiles covered with the same color.
-3. Prevent the opponent from clicking a tile on their turn.
+1. ![Get 4 consecutive tiles covered in a row with same color](https://github.com/theharishfactor/niya/blob/master/client/img/row-win.png)
+
+2. ![Get 4 consecutive tiles covered in a column with same color](https://github.com/theharishfactor/niya/blob/master/client/img/col-win.png)
+
+3. ![Get 2x2 grid of tiles covered with the same color](https://github.com/theharishfactor/niya/blob/master/client/img/grid-win.png)
+
+4. Prevent the opponent from clicking a tile on their turn.
 
 ## Building
 
