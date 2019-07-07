@@ -4,7 +4,7 @@ const setUpGame = function() {
   let P1 = 'blue', P2 = 'red';
   let player = null;
   let game = null;
-  const socket = io('http://45.55.14.12:3000:3000');
+  const socket = io('http://localhost:3000');
   let created = false;
   let joined = false;
 
