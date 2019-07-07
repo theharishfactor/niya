@@ -1,0 +1,72 @@
+.tile {
+  width: 80px;
+  height: 80px;
+  border: solid 1px #999999;
+  float: left;
+  margin-right: 8px;
+  margin-top: 8px;
+  text-shadow: 0 1px black;
+  cursor: pointer;
+  line-height: 35px;
+}
+
+.clearTile {
+  clear: left;
+}
+
+#lastClickedPanel {
+  display: none;
+}
+
+#container {
+  font-family: 'Lato';
+  position: relative;
+  margin-left: -155px;
+  left: 50%;
+}
+
+.blueCovered {
+  background: url('../img/bluecovered.png') !important;
+}
+
+.redCovered {
+  background: url('../img/redcovered.png') !important;
+}
+
+.inputs {
+  display: inline-block;
+  margin-right: 10px;
+  height: 50px;
+  width: 150px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  letter-spacing: .1em;
+}
+
+.buttons {
+  padding: 15px 15px;
+  background: #85de6f;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  vertical-align: top;
+  text-transform: uppercase;
+  cursor: pointer;
+  max-width: 100px;
+  text-align: center;
+  display: inline-block;
+}
+
+@media only screen and (max-width: 30em) {
+  .buttons {
+    padding: 15px 15px;
+    background: #85de6f;
+    border: 1px solid #ddd;
+    font-size: 2em;
+    vertical-align: top;
+    text-transform: uppercase;
+    cursor: pointer;
+    max-width: 200px;
+    text-align: center;
+    display: inline-block;
+  }
+}

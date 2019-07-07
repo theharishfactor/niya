@@ -1,0 +1,218 @@
+body {
+  background: #ececec;
+  font-family: 'Lato';
+} 
+
+#container {
+  position: relative;
+  margin-left: -155px;
+  left: 50%;
+  width: 50%;
+}
+
+#gameStatus {
+  display: none;
+}
+
+#gameStatus::before {
+  content: "Status: ";
+  font-weight: bold;
+}
+
+#playerName {
+  display: none;
+}
+
+#playerName::before {
+  content: "Name: ";
+  color: #000000;
+  font-weight: bold;
+}
+
+#opponent {
+  display: none;
+}
+
+#opponent::before {
+  content: "Opponent: ";
+  font-weight: bold;
+  color: #000000;
+}
+
+.blueColor {
+  color: #3498db;
+  margin: 5px 0;
+}
+
+.redColor {
+  color: #e85050;
+  margin: 5px 0;
+}
+
+#messages {
+  float: left;
+  width: 270px;
+}
+
+#lastClickedPanel {
+  float: left;
+  width: 120px;
+}
+
+
+#gameId::before {
+  content: 'Invitation Code: ';
+  font-weight: bold;
+}
+
+#gameId {
+  margin: 5px 0;
+  display: none;
+}
+
+#turn {
+  display: none;
+  margin: 5px 0;
+}
+
+#turn::before {
+  content: "Current Turn: ";
+  font-weight: bold;
+}
+
+#loader {
+  margin: 10px 150px;
+  border: 4px solid #e85050;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  animation: spin 2s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.panels {
+  position: relative;
+  left: -60px;
+}
+
+.tile {
+  width: 80px;
+  height: 80px;
+  border: solid 1px #999999;
+  float: left;
+  margin-right: 8px;
+  margin-top: 8px;
+  text-shadow: 0 1px black;
+  cursor: pointer;
+  line-height: 35px;
+  background-size: contain;
+}
+
+.clearTile {
+  clear: left;
+}
+
+.lastPlayed {
+  outline: 5px solid #212120;
+}
+
+#lastClickedPanel {
+  display: none;
+}
+
+.blueCovered {
+  background: url('../img/bluecovered.png') !important;
+}
+
+.redCovered {
+  background: url('../img/redcovered.png') !important;
+}
+
+.inputs {
+  display: inline-block;
+  margin-right: 10px;
+  height: 50px;
+  width: 150px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  letter-spacing: .1em;
+}
+
+.buttons {
+  padding: 15px 15px;
+  background: #85de6f;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  vertical-align: top;
+  text-transform: uppercase;
+  cursor: pointer;
+  max-width: 100px;
+  text-align: center;
+  display: inline-block;
+}
+
+@media only screen and (max-width: 600px) {
+
+
+  #container {
+    position: relative;
+    width: 100%;
+    left: 60%;
+    margin-left: -50%;
+  }
+
+  #tileContainer {
+    width: 100%;
+  }
+
+  .panels {
+    width: 160px;
+    left: 80px;
+  }
+
+  #messages {
+    float: left;
+    width: 215px;
+  }
+
+  #lastClickedPanel {
+    float: left;
+    width: 60px;
+  }
+
+  .inputs {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+    width: 150px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    letter-spacing: .1em;
+  }
+
+  .buttons {
+    width: 150px;
+    text-align: center;
+    padding: 15px 0;
+    background: #85de6f;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    vertical-align: top;
+    text-transform: uppercase;
+    cursor: pointer;
+    max-width: 150px;
+    text-align: center;
+    display: inline-block;
+  } 
+
+  .tile {
+    width: 60px;
+    height: 60px;
+  }
+}

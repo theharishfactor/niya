@@ -1,0 +1,46 @@
+<html> 
+ 
+ 	<head>
+ 		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<link rel="stylesheet" href="/niya/main.css"></script>
+		<link href="https://fonts.googleapis.com/css?family=DM+Serif+Text&display=swap" rel="stylesheet">
+		<link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic' rel='stylesheet' type='text/css'>
+		<meta http-equiv="Content-Security-Policy" content="default-src data: gap://* file://* https://ssl.gstatic.com *; img-src 'self' * data:; style-src 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-eval' 'unsafe-inline' *; connect-src 'self' * ws://* wss://*;">
+
+	</head>
+	<body>
+	<h1 style="text-align:center; font-family: 'DM Serif Text', serif;">NIYA</h1>
+		<div id="container">
+			<div class="panels" id="createPanel">
+				<h4>Create a new game</h4>
+				<input class="inputs" type="text" name="name" id="nameNew" placeholder="Enter your name" required>
+				<input class="inputs" type="text" name="gameId" id="gameIdNew" placeholder="Enter your game id" required>
+		    	<div class="buttons" id="new">New Game</div>
+		    </div>
+			<div class="panels" id="joinPanel">
+				<h4>Join an existing game</h4>
+		    	<input class="inputs" type="text" name="name" id="nameJoin" placeholder="Enter your name" required>
+		    	<input class="inputs" type="text" name="room" id="room" placeholder="Enter Game ID" required>
+		    	<div class="buttons" id="join">Join Game</div>
+		    </div>
+		    <div id="messages">
+		    	<div id="playerName"></div>
+		    	<div id="opponent"></div>
+		    	<div id="gameStatus"></div>
+				<div id="loader"></div>
+				<div id="gameId"></div>
+			    <div id="turn"></div>
+		    </div>
+		    <div id="lastClickedPanel">
+		    	<div style="float: left;">Last Tile</div>
+		    	<div id="lastClicked" class="clearTile tile"></div>
+		    </div>
+		    <div id="tileContainer"></div>
+		</div>
+		<script src="../socket.io/socket.io.js"></script>
+		<script src="/niya/utils.js"></script>
+		<script src="/niya/socket.js"></script>
+		<script src="/niya/main.js"></script>
+	</body>
+</html>
