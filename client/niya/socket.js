@@ -124,26 +124,15 @@ const setUpGame = function() {
     document.getElementById('turn').innerHTML = 'Blue';
   }); 
 
-  /**
-   * Opponent played his turn. Update UI.
-   * Allow the current player to play now. 
-   */
   socket.on('turnPlayed', function(data){
     game.updateBoard(data.tile, data.playedBy);
   });
 
-  /**
-   * If the other player wins or game is tied, this event is received. 
-   * Notify the user about either scenario and end the game. 
-   */
   socket.on('gameEnd', function(data){
     socket.emit('disconnect', data);
     game.endGame(data.message);
   })
 
-  /**
-   * End the game on any err event. 
-   */
   socket.on('err', function(data){
     game.endGame(data.message);
   });

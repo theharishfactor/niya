@@ -219,16 +219,16 @@ Game.prototype.updateBoard = function(tile, playedBy) {
     this.removeFromUnclicked(tile);
    
     
-    if (this.checkIfWin(playedBy, tile)) {
-      alert(`${this.players[playedBy].name} wins!`);
-      this.isGameOver = true;
-      this.socket.emit('gameEnded', {room: this.roomId});
-      document.getElementById('gameStatus').innerHTML = `${this.players[playedBy].name} wins!`;
-    } else if (this.checkIfDraw()) {
+    if (this.checkIfDraw()) {
       alert('Draw!');
       document.getElementById('gameStatus').innerHTML = `It's a draw!`;
       this.isGameOver = true;
       this.socket.emit('gameEnded', {room: this.roomId});
+    } else if (this.checkIfWin(playedBy, tile)) {
+      alert(`${this.players[playedBy].name} wins!`);
+      this.isGameOver = true;
+      this.socket.emit('gameEnded', {room: this.roomId});
+      document.getElementById('gameStatus').innerHTML = `${this.players[playedBy].name} wins!`;
     } 
 
     this.togglePlayer(playedBy);
@@ -245,7 +245,6 @@ Game.prototype.playTurn = function(tile, curPlayer){
     curPlayer,
     room: this.getRoomId()
   };
-  // Emit an event to update other player that you've played your turn.
   this.socket.emit('playTurn', turnObj);
 }
 
