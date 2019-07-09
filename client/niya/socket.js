@@ -19,12 +19,12 @@ const setUpGame = function() {
       created = true;
       const name = newGameName.value;
       const gameId = newGameId.value;
-    	if(!name){
+      if(!name){
         alert('Please enter your name.');
         return;
       }
-      if(!name){
-        alert('Please enter your name.');
+      if(!gameId){
+        alert('Please enter a game Id.');
         return;
       }
       game = new Game(socket);
@@ -36,10 +36,14 @@ const setUpGame = function() {
   joinButton.addEventListener('click', (e) => {
     if (!joined) {
       joined = true;
-    	const name = joinGameName.value;
-    	const gameId = room.value;
-    	if(!name || !gameId){
+      const name = joinGameName.value;
+      const gameId = room.value;
+      if(!name){
         alert('Please enter your name.');
+        return;
+      }
+      if(!gameId){
+        alert('Please enter a game Id.');
         return;
       }
       socket.emit('joinGame', {name: name, room: gameId});
@@ -131,8 +135,8 @@ const setUpGame = function() {
   socket.on('gameEnd', function(data){
     socket.emit('disconnect', data);
     game.endGame(data.message);
-  })
-
+  });
+  
   socket.on('err', function(data){
     game.endGame(data.message);
   });

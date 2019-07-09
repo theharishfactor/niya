@@ -120,35 +120,60 @@ Game.prototype.displayBoard = function(roomId, message, tiles){
 }
 
 Game.prototype.isRowOrColumnFilled = function(curPlayer, row, col) {
+  let checkPlayer = null;
   if (curPlayer === 'blue') {
     checkPlayer = 'red';
   } else {
     checkPlayer = 'blue';
   }
-  return this.rows[row].length  === 4 && !this.rows[row].includes(checkPlayer) || 
-    this.cols[col].length === 4 && !this.cols[col].includes(checkPlayer);
+
+  return this.rows[row].filter(i => i === curPlayer).length === 4 ||
+    this.cols[col].filter(i => i === curPlayer).length === 4;
 }
 
-Game.prototype.isGridComplete = function(curPlayer, index) {
-  let gridCheck = [
-    [index, index+1, index+4, index+5],
-    [index, index-1, index-4, index-5],
-    [index, index-1, index+3, index+4],
-    [index, index+1, index-3, index-4]
-  ];
+Game.prototype.isDiagonalComplete = function (curPlayer, index) {
+  if (index%5 === 0 || index%3 === 0) {
+    const playerTiles = this.playerTiles[curPlayer];
+    if (index %5 === 0) {
+      return playerTiles.includes(0) && playerTiles.includes(5) &&
+        playerTiles.includes(10) && playerTiles.includes(15);
+    } else if (index %3 === 0) {
+      return playerTiles.includes(3) && playerTiles.includes(6) &&
+        playerTiles.includes(9) && playerTiles.includes(12);
+    }
+  }
+  return false;
+};
 
-  for (let i=0; i<gridCheck.length; i++) {
-    const tilesToCheck = gridCheck[i];
-    let win = true;
-    for (let j=0; j<tilesToCheck.length; j++) {
-      const tileIndex = tilesToCheck[j];
-      if (!this.playerTiles[curPlayer].includes(tileIndex)) {
-        win = false;
-        break;
+
+Game.prototype.isGridComplete = function(curPlayer, row, col) {
+  if (row > 0) {
+    if (col < 3) {
+      if (this.rows[row][col] === curPlayer && this.rows[row-1][col] === curPlayer && 
+        this.rows[row-1][col+1] === curPlayer && this.rows[row][col+1] === curPlayer) {
+        return true;
+      }
+    } 
+    if (col > 0) {
+      if(this.rows[row][col] === curPlayer && this.rows[row-1][col] === curPlayer && 
+        this.rows[row-1][col-1] === curPlayer && this.rows[row][col-1] === curPlayer) {
+        return true;
       }
     }
-    if (win) {
-      return true;
+  }
+
+  if (row < 3) {
+    if (col < 3) {
+      if (this.rows[row][col] === curPlayer && this.rows[row+1][col] === curPlayer && 
+        this.rows[row+1][col+1] === curPlayer && this.rows[row][col+1] === curPlayer) {
+        return true;
+      }
+    }
+    if (col > 0) {
+      if (this.rows[row][col] === curPlayer && this.rows[row+1][col] === curPlayer && 
+        this.rows[row+1][col-1] === curPlayer && this.rows[row][col-1] === curPlayer) {
+        return true;
+      }
     }
   }
 
@@ -174,11 +199,15 @@ Game.prototype.checkIfWin = function (curPlayer, tile) {
     return true;
   }
 
-  if (this.isGridComplete(curPlayer, index)) {
+  if (this.isGridComplete(curPlayer, row, col)) {
     this.isGameOver = true;
     return true;
   }
   
+ if (this.isDiagonalComplete(curPlayer, index)) {
+    this.isGameOver = true;
+    return true;
+  }
 
   if (this.blockedOpponentClicks(tile)) {
     return true;
@@ -201,8 +230,8 @@ Game.prototype.checkIfDraw = function() {
 
 Game.prototype.addClickedTileToList = function(tile, playedBy) {
   this.playerTiles[playedBy].push(tile.index);
-  this.rows[tile.row].push(playedBy);
-  this.cols[tile.col].push(playedBy);
+  this.rows[tile.row][tile.col] = playedBy;
+  this.cols[tile.col][tile.row] = playedBy;
 };
 
 Game.prototype.updateBoard = function(tile, playedBy) {
