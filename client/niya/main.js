@@ -209,10 +209,6 @@ Game.prototype.checkIfWin = function (curPlayer, tile) {
     return true;
   }
 
-  if (this.blockedOpponentClicks(tile)) {
-    return true;
-  }
-
   return false;
 };
 
@@ -245,15 +241,22 @@ Game.prototype.updateBoard = function(tile, playedBy) {
     tile.clicked = playedBy;
     this.addClickedTileToList(tile, playedBy);
 
+    if (this.checkIfWin(playedBy, tile)) {
+      alert(`${this.players[playedBy].name} wins!`);
+      this.isGameOver = true;
+      this.socket.emit('gameEnded', {room: this.roomId});
+      document.getElementById('gameStatus').innerHTML = `${this.players[playedBy].name} wins!`;
+    } 
+
     this.removeFromUnclicked(tile);
-   
-    
     if (this.checkIfDraw()) {
       alert('Draw!');
       document.getElementById('gameStatus').innerHTML = `It's a draw!`;
       this.isGameOver = true;
       this.socket.emit('gameEnded', {room: this.roomId});
-    } else if (this.checkIfWin(playedBy, tile)) {
+    } 
+
+    if (this.blockedOpponentClicks(tile)) {
       alert(`${this.players[playedBy].name} wins!`);
       this.isGameOver = true;
       this.socket.emit('gameEnded', {room: this.roomId});
