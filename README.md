@@ -18,12 +18,15 @@ If Player 1 covers a tile with "Bird and Rain cloud", then the next player can c
 ![row win](https://github.com/theharishfactor/niya/blob/master/client/img/row-win.png)
 
 2. Get 4 consecutive tiles covered in a column with same color 
-![column win]](https://github.com/theharishfactor/niya/blob/master/client/img/col-win.png)
+![column win](https://github.com/theharishfactor/niya/blob/master/client/img/col-win.png)
 
-3. Get 2x2 grid of tiles covered with the same color
+3. Get one of the two diagonals covered with the same color
+![diagonal win](https://github.com/theharishfactor/niya/blob/master/client/img/dia-win.png)
+
+4. Get 2x2 grid of tiles covered with the same color
 ![grid win](https://github.com/theharishfactor/niya/blob/master/client/img/grin-win.png)
 
-4. Prevent the opponent from clicking a tile on their turn.
+5. Prevent the opponent from clicking a tile on their turn.
 
 ## Building
 
