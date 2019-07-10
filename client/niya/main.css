@@ -59,6 +59,22 @@ body {
   width: 120px;
 }
 
+#restartButton {
+  padding: 15px 15px;
+  background: #85de6f;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  vertical-align: top;
+  text-transform: uppercase;
+  cursor: pointer;
+  max-width: 100px;
+  text-align: center;
+  max-height: 50px;
+  margin-top: 10px;
+  display: none;
+  margin-left: 140px;
+}
+
 
 #gameId::before {
   content: 'Invitation Code: ';
@@ -157,7 +173,7 @@ body {
   display: inline-block;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 750px) {
 
 
   #container {
@@ -214,5 +230,9 @@ body {
   .tile {
     width: 60px;
     height: 60px;
+  }
+
+  #restartButton {
+    margin-left: 90px;
   }
 }

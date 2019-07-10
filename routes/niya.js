@@ -14,15 +14,19 @@ const niyaRouter = (io) => {
 				}
 				gameIds.push(data.gameId);
 				socket.join(data.gameId);
-				socket.emit('newGame', {name: data.name, room: data.gameId, tiles: data.tiles});
+				socket.emit('newGame', {name: data.name, room: data.gameId, tiles: data.tiles, isRestart: true});
 				tilesPerRoom[data.gameId] = data.tiles;
 				playersPerRoom[data.gameId] = [data.name];
+
+				if (data.isRestart) {
+					io.sockets.in(data.gameId).emit('restart-created');
+				}
 			});
 
-			socket.on('joinGame', function(data){
+			socket.on('joinGame', function(data) {
 				const room = io.nsps['/'].adapter.rooms[data.room];
 
-				if (room && room.length === 1){
+				if (room && playersPerRoom[data.room].length === 1) {
 					playersPerRoom[data.room].push(data.name);
 					socket.join(data.room);
 					socket.broadcast.to(data.room).emit('player1', {players: playersPerRoom[`${data.room}`]});
@@ -30,7 +34,11 @@ const niyaRouter = (io) => {
 				}
 			});
 
-			socket.on('playTurn', function(data){
+			socket.on('restartGame', function(data) {
+				io.sockets.in(data.room).emit('restarted');
+			});
+
+			socket.on('playTurn', function(data) {
 				socket.broadcast.to(data.room).emit('turnPlayed', {
 					tile: data.tile,
 					room: data.room,
@@ -46,7 +54,7 @@ const niyaRouter = (io) => {
 					delete tilesPerRoom[data.room];
 					delete playersPerRoom[data.room];
 				}
-				socket.leave(data.room);
+				// socket.leave(data.room);
 			});
 
 			socket.on('disconnect', function(data){

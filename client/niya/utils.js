@@ -35,3 +35,21 @@ function modifyClickedTile(id, playedBy) {
   document.getElementById('lastClickedPanel').style.display = 'block';
   tileEl.style.pointerEvents = 'none';
 }
+
+function setContent(divName, html) {
+  const el = document.getElementsByClassName(divName);
+  el.innerHTML = html;
+}
+
+function show(divName) {
+  document.getElementById('divName').style.display = 'block';
+}
+
+function hide(divName) {
+  document.getElementById('divName').style.display = 'none';
+}
+
+function getInputVaue(divName) {
+  const el = document.getElementById('room');
+  return el.value;
+}

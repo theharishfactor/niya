@@ -1,10 +1,13 @@
 const Game = function(socket) {
+  this.reset()
+  this.socket = socket;
   this.roomId = null;
-  this.board = [];
+};
+
+Game.prototype.reset = function() {
   this.lastClicked = [];
   this.curPlayer = null;
   this.playerType = null;
-  this.socket = socket;
   this.playerTiles = {
     blue: [],
     red: []
@@ -14,6 +17,12 @@ const Game = function(socket) {
   this.players = {};
   this.isGameOver = false;
   this.unclickedTiles = [];
+
+  const tiles = document.getElementsByClassName('playingTile');
+  while(tiles.length > 0){
+    tiles[0].parentNode.removeChild(tiles[0]);
+  }
+  document.getElementById('lastClickedPanel').style.display = 'none';
 }
 
 Game.prototype.setPlayer= function(player) {
@@ -92,7 +101,7 @@ Game.prototype.createGameBoard = function (tiles) {
   const container = document.getElementById('tileContainer');
   const tileElements = tiles.map((tile, index) => {
     const tileEl = document.createElement('div');
-    tileEl.className = index %4 === 0 ? 'tile clearTile' : 'tile';
+    tileEl.className = index %4 === 0 ? 'tile playingTile clearTile' : 'tile playingTile';
     tileEl.style.backgroundImage = `url('../img/niya-${tile.symbols[1].toLowerCase()}.png'), url('../img/niya-${tile.symbols[0].toLowerCase()}.png')`;
     tile.row = Math.floor(index / 4);
     tile.col = Math.floor(index % 4);
@@ -246,6 +255,8 @@ Game.prototype.updateBoard = function(tile, playedBy) {
       this.isGameOver = true;
       this.socket.emit('gameEnded', {room: this.roomId});
       document.getElementById('gameStatus').innerHTML = `${this.players[playedBy].name} wins!`;
+      this.togglePlayer(playedBy);
+      return;
     } 
 
     this.removeFromUnclicked(tile);
@@ -254,6 +265,8 @@ Game.prototype.updateBoard = function(tile, playedBy) {
       document.getElementById('gameStatus').innerHTML = `It's a draw!`;
       this.isGameOver = true;
       this.socket.emit('gameEnded', {room: this.roomId});
+      this.togglePlayer(playedBy);
+      return;
     } 
 
     if (this.blockedOpponentClicks(tile)) {
@@ -261,6 +274,8 @@ Game.prototype.updateBoard = function(tile, playedBy) {
       this.isGameOver = true;
       this.socket.emit('gameEnded', {room: this.roomId});
       document.getElementById('gameStatus').innerHTML = `${this.players[playedBy].name} wins!`;
+      this.togglePlayer(playedBy);
+      return;
     } 
 
     this.togglePlayer(playedBy);
