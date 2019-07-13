@@ -5,22 +5,6 @@ function shuffle(array) {
   }
 }
 
-function hashCode(str) { // java String#hashCode
-    var hash = 0;
-    for (var i = 0; i < str.length; i++) {
-       hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return hash;
-} 
-
-function intToRGB(i){
-    var c = (i & 0x00FFFFFF)
-        .toString(16)
-        .toUpperCase();
-
-    return "00000".substring(0, 6 - c.length) + c;
-}
-
 function removeLastPlayedClass() {
   const list = document.getElementsByClassName('lastPlayed');
   for (let i=0; i<list.length; i++) {
@@ -42,14 +26,14 @@ function setContent(divName, html) {
 }
 
 function show(divName) {
-  document.getElementById('divName').style.display = 'block';
+  document.getElementById(divName).style.display = 'block';
 }
 
 function hide(divName) {
-  document.getElementById('divName').style.display = 'none';
+  document.getElementById(divName).style.display = 'none';
 }
 
 function getInputVaue(divName) {
-  const el = document.getElementById('room');
+  const el = document.getElementById(divName);
   return el.value;
 }

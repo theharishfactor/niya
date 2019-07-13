@@ -4,24 +4,47 @@ const Game = function(socket) {
   this.roomId = null;
 };
 
+Game.prototype.constructGameFromState = function(gameState) {
+  this.playerTiles = gameState.playerTiles;
+  this.rows = gameState.rows;
+  this.cols = gameState.cols;
+  this.lastClicked = gameState.lastClicked;
+  this.gameTiles = gameState.gameTiles;
+  this.curPlayer = gameState.curPlayer;
+
+  const tiles = document.getElementsByClassName('playingTile');
+  while(tiles.length > 0){
+    tiles[0].parentNode.removeChild(tiles[0]);
+  }
+  this.createGameBoard(this.gameTiles, true);
+
+  document.getElementById('lastClicked').style.backgroundImage = 
+    `url('../img/niya-${this.lastClicked[1].toLowerCase()}.png'), url('../img/niya-${this.lastClicked[0].toLowerCase()}.png')`;
+  document.getElementById('lastClickedPanel').style.display = 'block';
+
+  this.unclickedTiles = gameState.unclickedTiles;
+}
+
 Game.prototype.reset = function() {
-  this.lastClicked = [];
-  this.curPlayer = null;
   this.playerType = null;
+  this.isGameOver = false;
+  
+  this.players = {};
+  this.curPlayer = null;
+  this.lastClicked = [];
   this.playerTiles = {
     blue: [],
     red: []
   };
   this.rows = [[], [], [], []];
   this.cols = [[], [], [], []];
-  this.players = {};
-  this.isGameOver = false;
   this.unclickedTiles = [];
 
   const tiles = document.getElementsByClassName('playingTile');
   while(tiles.length > 0){
     tiles[0].parentNode.removeChild(tiles[0]);
   }
+
   document.getElementById('lastClickedPanel').style.display = 'none';
 }
 
@@ -97,19 +120,32 @@ const clickHandler = function(tile) {
   }
 }
 
-Game.prototype.createGameBoard = function (tiles) {
+Game.prototype.createGameBoard = function (tiles, fromState) {
   const container = document.getElementById('tileContainer');
   const tileElements = tiles.map((tile, index) => {
-    const tileEl = document.createElement('div');
-    tileEl.className = index %4 === 0 ? 'tile playingTile clearTile' : 'tile playingTile';
-    tileEl.style.backgroundImage = `url('../img/niya-${tile.symbols[1].toLowerCase()}.png'), url('../img/niya-${tile.symbols[0].toLowerCase()}.png')`;
     tile.row = Math.floor(index / 4);
     tile.col = Math.floor(index % 4);
-    tileEl.id = `row-${tile.row}-col-${tile.col}`;
     tile.index = index;
     
+    const tileEl = document.createElement('div');
+    tileEl.id = `row-${tile.row}-col-${tile.col}-index-${tile.index}`;
+    tileEl.className = index %4 === 0 ? 'tile playingTile clearTile' : 'tile playingTile';
+    tileEl.style.backgroundImage = `url('../img/niya-${tile.symbols[1].toLowerCase()}.png'), url('../img/niya-${tile.symbols[0].toLowerCase()}.png')`;
     tileEl.addEventListener('click', clickHandler.bind(this, tile));
     this.unclickedTiles.push(tile);
+
+    if (fromState) {
+      if (this.playerTiles.blue.includes(tile.index)) {
+        tileEl.className = `${tileEl.className} blueCovered`;
+        tileEl.style.pointerEvents = 'none';
+      } else if (this.playerTiles.red.includes(tile.index)) {
+        tileEl.className = `${tileEl.className} redCovered`;
+        tileEl.style.pointerEvents = 'none';
+      }
+      if (tile.symbols.includes(this.lastClicked[0]) && tile.symbols.includes(this.lastClicked[1])) {
+        tileEl.className = `${tileEl.className} lastPlayed`;
+      }
+    }
 
     return tileEl;
   });
@@ -241,15 +277,14 @@ Game.prototype.addClickedTileToList = function(tile, playedBy) {
 
 Game.prototype.updateBoard = function(tile, playedBy) {
   if (playedBy === this.getCurPlayer()) {
-    this.lastClicked = [tile.symbols[0], tile.symbols[1]];  
-    const id = `row-${tile.row}-col-${tile.col}`; 
+    this.lastClicked = tile.symbols;  
+    const id = `row-${tile.row}-col-${tile.col}-index-${tile.index}`; 
 
     removeLastPlayedClass();
     modifyClickedTile(id, playedBy);
     
     tile.clicked = playedBy;
     this.addClickedTileToList(tile, playedBy);
-
     if (this.checkIfWin(playedBy, tile)) {
       alert(`${this.players[playedBy].name} wins!`);
       this.isGameOver = true;
@@ -292,6 +327,7 @@ Game.prototype.playTurn = function(tile, curPlayer){
     curPlayer,
     room: this.getRoomId()
   };
+
   this.socket.emit('playTurn', turnObj);
 }
 
