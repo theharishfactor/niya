@@ -8,7 +8,6 @@ const setUpGame = function() {
   let joined = false;
 
   const newButton = document.getElementById('new');
-  const newGameId = document.getElementById('gameIdNew');
   const joinButton = document.getElementById('join');
   const restartButton = document.getElementById('restartButton');
   const newGameName = document.getElementById('nameNew');
@@ -19,17 +18,13 @@ const setUpGame = function() {
     if (!created) {
       created = true;
       const name = newGameName.value;
-      const gameId = newGameId.value;
       if(!name || name.trim().length === 0){
         alert('Please enter your name.');
         return;
       }
-      if(!gameId || gameId.trim().length === 0){
-        alert('Please enter a game Id.');
-        return;
-      }
+
       game = new Game(socket);
-      socket.emit('createGame', {name: name.trim(), gameId: gameId.trim(), tiles: game.generateTiles()});
+      socket.emit('createGame', {name: name.trim(), tiles: game.generateTiles()});
     }
   });
 
@@ -83,7 +78,6 @@ const setUpGame = function() {
   socket.on('newGame', function(data){
     var message = `Waiting for Player-2 to connect`;
 
-
     document.getElementById('createPanel').style.display = 'none';
     document.getElementById('joinPanel').style.display = 'none';
     document.getElementById('gameStatus').style.display = 'block';
@@ -101,7 +95,7 @@ const setUpGame = function() {
       playerType: 'blue',
       name: data.name
     });
-    game.displayBoard(data.room, message, data.tiles);   
+    game.displayBoard(data.room, message, data.tiles);
   });
 
  

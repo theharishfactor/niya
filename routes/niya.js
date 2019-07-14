@@ -1,5 +1,6 @@
 const express = require('express');  
 const router = express.Router();  
+const randomWords = require('random-words');
 
 let gameIds = [];
 const gameStatePerRoom = {};
@@ -8,15 +9,37 @@ const niyaRouter = (io) => {
 	router.get('/', function(req, res) { 
 		io.on('connection', function(socket){
 			socket.on('createGame', function(data) {
-				if (gameIds.includes(data.gameId)) {
+				let gameId = data.gameId;
+
+				/* This is to prevent multiple room creations. If socket already has a room
+				attached, return. If no game Id, it's a new game. If a new game socket already
+				has a room, skip. */
+				if (!gameId && socket.room) {
 					return;
 				}
-				gameIds.push(data.gameId);
-				socket.join(data.gameId);
-				socket.room = data.gameId;
+
+				/*If no game id, it's a restarted game, but if there is already game state, skip
+				because restart already initiated.*/
+
+				if (gameId && gameStatePerRoom[gameId]){
+					return;
+				}
+
+
+				/*If no game id, it's a new game. So create a game Id*/
+				if (!gameId) {
+					gameId = randomWords();
+					if (gameIds.includes(gameId)) {
+						gameId = `${gameId}-${randomWords()}`
+					}
+				}
+
+				gameIds.push(gameId);
+				socket.join(gameId);
+				socket.room = gameId;
 				socket.color = 'blue';
-				socket.emit('newGame', {name: data.name, room: data.gameId, tiles: data.tiles, isRestart: true});
-				gameStatePerRoom[data.gameId] = {
+				socket.emit('newGame', {name: data.name, room: gameId, tiles: data.tiles});
+				gameStatePerRoom[gameId] = {
 					unclickedTiles: [].concat(data.tiles),
 					playerTiles: {
 						blue: [],
@@ -33,7 +56,7 @@ const niyaRouter = (io) => {
 				};
 			
 				if (data.isRestart) {
-					io.sockets.in(data.gameId).emit('restart-created');
+					io.sockets.in(gameId).emit('restart-created');
 				}
 			});
 
